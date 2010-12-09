@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Windows.Themes;
 using WPFAutoCompleteBox.Provider;
+using WPFAutoCompleteBox.Controls;
 
 namespace WPFAutoCompleteBox.Core
 {
@@ -38,7 +39,7 @@ namespace WPFAutoCompleteBox.Core
         private string _textBeforeChangedByCode;
         private bool _textChangedByCode;
 
-        private TextBox _textBox;
+        private CompletableTextBox _textBox;
         private Popup _popup;
         private SystemDropShadowChrome _chrome;
         private ListBox _listBox;
@@ -106,12 +107,12 @@ namespace WPFAutoCompleteBox.Core
             // default constructor
         }
 
-        public AutoCompleteManager(TextBox textBox)
+        public AutoCompleteManager(CompletableTextBox textBox)
         {
             AttachTextBox(textBox);
         }
 
-        public void AttachTextBox(TextBox textBox)
+        public void AttachTextBox(CompletableTextBox textBox)
         {
             Debug.Assert(_textBox == null);
             if (Application.Current.Resources.FindName("AcTb_ListBoxStyle") == null)
@@ -361,20 +362,24 @@ namespace WPFAutoCompleteBox.Core
             }
 
             if (index != _listBox.SelectedIndex)
-            {
-                string text;
+            {                
+                //string text;
+                object item;
+
                 if (index < 0 || index > _listBox.Items.Count - 1)
                 {
-                    text = _textBeforeChangedByCode;
+                    //text = _textBeforeChangedByCode;
+                    item = null;
                     _listBox.SelectedIndex = -1;
                 }
                 else
                 {
                     _listBox.SelectedIndex = index;
                     _listBox.ScrollIntoView(_listBox.SelectedItem);
-                    text = _listBox.SelectedItem as string;
+                    item = _listBox.SelectedItem;
+                    //text = _listBox.SelectedItem as string;
                 }
-                UpdateText(text, false);
+                UpdateItem(item, false);
                 e.Handled = true;
             }
         }
@@ -452,7 +457,8 @@ namespace WPFAutoCompleteBox.Core
             if (item != null)
             {
                 _popup.IsOpen = false;
-                UpdateText(item.Content as string, true);
+                //UpdateText(item.Content as string, true);
+                UpdateItem(item.Content, true);
             }
         }
 
@@ -559,7 +565,7 @@ namespace WPFAutoCompleteBox.Core
           |                                                                     |
           +---------------------------------------------------------------------*/
 
-        private void PopulatePopupList(IEnumerable<string> items)
+        private void PopulatePopupList(IEnumerable<object> items)
         {
             var text = _textBox.Text;
 
@@ -569,10 +575,11 @@ namespace WPFAutoCompleteBox.Core
                 _popup.IsOpen = false;
                 return;
             }
-            var firstSuggestion = _listBox.Items[0] as string;
-            if (_listBox.Items.Count == 1 && text.Equals(firstSuggestion, StringComparison.OrdinalIgnoreCase))
-            {
+            var firstSuggestion = _listBox.Items[0];
+            if (_listBox.Items.Count == 1 && text.Equals(firstSuggestion.ToString(), StringComparison.OrdinalIgnoreCase))
+            {                
                 _popup.IsOpen = false;
+                _textBox.SelectedItem = firstSuggestion;
             }
             else
             {
@@ -593,11 +600,11 @@ namespace WPFAutoCompleteBox.Core
                         var appendProvider = _dataProvider as IAutoAppendDataProvider;
                         if (appendProvider != null)
                         {
-                            appendText = appendProvider.GetAppendText(text, firstSuggestion);
+                            appendText = appendProvider.GetAppendText(text, firstSuggestion.ToString());
                         }
                         else
                         {
-                            appendText = firstSuggestion.Substring(_textBox.Text.Length);
+                            appendText = firstSuggestion.ToString().Substring(_textBox.Text.Length);
                         }
                         if (!string.IsNullOrEmpty(appendText))
                         {
@@ -694,17 +701,17 @@ namespace WPFAutoCompleteBox.Core
             _popup.IsOpen = true;
         }
 
-        private void UpdateText(string text, bool selectAll)
+        private void UpdateItem(object item, bool selectAll)
         {
             _textChangedByCode = true;
-            _textBox.Text = text;
+            _textBox.SelectedItem = item;
             if (selectAll)
             {
                 _textBox.SelectAll();
             }
             else
             {
-                _textBox.SelectionStart = text.Length;
+                _textBox.SelectionStart = _textBox.Text.Length;
             }
             _textChangedByCode = false;
         }

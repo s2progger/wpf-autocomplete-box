@@ -50,6 +50,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CompletableTextBox.cs" />
     <Compile Include="Provider\IAutoAppendDataProvider.cs" />
     <Compile Include="Provider\IAutoCompleteDataProvider.cs" />
     <Resource Include="Controls\Resources.xaml">

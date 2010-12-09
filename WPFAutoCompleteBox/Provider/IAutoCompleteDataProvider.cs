@@ -4,6 +4,6 @@ namespace WPFAutoCompleteBox.Provider
 {
     public interface IAutoCompleteDataProvider
     {
-        IEnumerable<string> GetItems(string textPattern);
+        IEnumerable<object> GetItems(string textPattern);
     }
 }
