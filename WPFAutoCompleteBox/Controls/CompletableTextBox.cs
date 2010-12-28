@@ -9,8 +9,6 @@ namespace WPFAutoCompleteBox.Controls
 {
     public class CompletableTextBox : TextBox
     {
-        private bool textChangedInCode;
-
         public static DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(CompletableTextBox), new PropertyMetadata(null, SelectedItemPropertyChanged));
 
         public object SelectedItem
@@ -36,23 +34,12 @@ namespace WPFAutoCompleteBox.Controls
 
         public CompletableTextBox()
         {
-
-            TextChanged += CompletableTextBox_TextChanged;
-            textChangedInCode = false;
+            
         }
 
         private void ChangeSelectedItem(object item)
-        {
-            textChangedInCode = true;
-            Text = (item == null) ? null : item.ToString();
-            textChangedInCode = false;
-        }
-
-        private void CompletableTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (textChangedInCode || SelectedItem == null) return;
-
-            SelectedItem = null;
+        {   
+            Text = (item == null) ? null : item.ToString();         
         }
     }
 }
