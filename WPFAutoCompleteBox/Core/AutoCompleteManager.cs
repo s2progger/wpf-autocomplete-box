@@ -280,26 +280,20 @@ namespace WPFAutoCompleteBox.Core
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             _supressAutoAppend = e.Key == Key.Delete || e.Key == Key.Back;
+
             if (!_popup.IsOpen)
-            {
                 return;
-            }
-            if (e.Key == Key.Enter)
-            {
-                _popup.IsOpen = false;
-                _textBox.SelectAll();
-            }
-            else if (e.Key == Key.Escape)
+
+            var index = _listBox.SelectedIndex;
+                        
+            if (e.Key == Key.Escape)
             {
                 _popup.IsOpen = false;
                 e.Handled = true;
-            }
-            if (!_popup.IsOpen)
-            {
+
                 return;
             }
-            var index = _listBox.SelectedIndex;
-            if (e.Key == Key.PageUp)
+            else if (e.Key == Key.PageUp)
             {
                 if (index == -1)
                 {
@@ -360,26 +354,26 @@ namespace WPFAutoCompleteBox.Core
             {
                 ++index;
             }
+            if (e.Key == Key.Enter)
+            {
+                _popup.IsOpen = false;
+                _textBox.SelectAll();
+
+                UpdateItem(_listBox.SelectedItem, true);
+            }
 
             if (index != _listBox.SelectedIndex)
-            {                
-                //string text;
-                object item;
-
+            {   
                 if (index < 0 || index > _listBox.Items.Count - 1)
-                {
-                    //text = _textBeforeChangedByCode;
-                    item = null;
+                {                    
                     _listBox.SelectedIndex = -1;
                 }
                 else
                 {
                     _listBox.SelectedIndex = index;
-                    _listBox.ScrollIntoView(_listBox.SelectedItem);
-                    item = _listBox.SelectedItem;
-                    //text = _listBox.SelectedItem as string;
+                    _listBox.ScrollIntoView(_listBox.SelectedItem);                 
                 }
-                UpdateItem(item, false);
+
                 e.Handled = true;
             }
         }
