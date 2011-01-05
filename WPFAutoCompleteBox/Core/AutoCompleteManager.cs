@@ -577,7 +577,7 @@ namespace WPFAutoCompleteBox.Core
             }
             else
             {
-                _listBox.SelectedIndex = -1;
+                _listBox.SelectedIndex = 0;
                 _textBeforeChangedByCode = text;
                 _scrollViewer.ScrollToHome();
                 ShowPopup();
