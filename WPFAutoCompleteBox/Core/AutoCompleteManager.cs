@@ -699,6 +699,8 @@ namespace WPFAutoCompleteBox.Core
         {
             _textChangedByCode = true;
             _textBox.SelectedItem = item;
+            _textBox.Text = item.ToString();
+
             if (selectAll)
             {
                 _textBox.SelectAll();
