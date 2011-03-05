@@ -34,12 +34,22 @@ namespace WPFAutoCompleteBox.Controls
 
         public CompletableTextBox()
         {
-            
+            LostFocus += new RoutedEventHandler(CompletableTextBox_LostFocus);
         }
 
         private void ChangeSelectedItem(object item)
         {   
             Text = (item == null) ? null : item.ToString();         
+        }
+
+        public void CompletableTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var control = (CompletableTextBox)sender;
+
+            if (control.SelectedItem != null)
+                control.Text = control.SelectedItem.ToString();
+            else
+                control.Text = null;
         }
     }
 }
