@@ -1,12 +1,12 @@
-* WPF Auto Complete Box
+# WPF Auto Complete Box
 
 A reusable auto-complete textbox in WPF. This textbox allows users to start typing and have a list of matches show up below.
 
-*** Building
+### Building
 
 This repository contains a Visual Studio project that will build the project. Once built, simply reference the DLL in any projects that use it.
 
-*** Usage
+### Usage
 
 Reference the component in your XAML:
 
@@ -24,7 +24,7 @@ Reference the component in your XAML:
 
 Then you need to create an auto-complete provider that will return matches as the user types, for this example we will assume we want to auto-complete a list of companies that have been retrieved from a database:
 
-```C#
+```csharp
 class CompanyNameACProvider : IAutoCompleteDataProvider
 {
     ObservableCollection<Company> Companies;
@@ -47,7 +47,7 @@ class CompanyNameACProvider : IAutoCompleteDataProvider
 
 Attach this provider to the auto-complete component and you're done:
 
-```C#
+```csharp
 public partial class MainWindow
 {
     private void Window_Loaded(object sender, RoutedEventArgs e)
