@@ -53,7 +53,8 @@ public partial class MainWindow
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         var manager = new WPFAutoCompleteBox.Core.AutoCompleteManager(listWithOptions);
-        manager.DataProvider = new CompanyNameACProvider(Companies); // Companies would be a List of Company objects
+        manager.DataProvider = new CompanyNameACProvider(Companies); // Companies would be an ObservableCollection of Company objects
     }
+
 }
 ```
